@@ -1,43 +1,26 @@
-
-var hand = [{ Suit: 'Hearts', Type: '2', Value: 2},
-  { Suit: 'Hearts', Type: '3', Value: 3},
-  { Suit: 'Hearts', Type: '4', Value: 4},
-  { Suit: 'Hearts', Type: '5', Value: 5},
-  { Suit: 'Hearts', Type: '6', Value: 6}, { Suit: 'Hearts', Type: '5', Value: 5},
-  { Suit: 'Clubs', Type: '6', Value: 6}]
-
-
-var hand2 = [{ Suit: 'Hearts', Type: '2', Value: 2},
-  { Suit: 'Spades', Type: '2', Value: 2},
-  { Suit: 'Clubs', Type: '2', Value: 2},
-  { Suit: 'Diamonds', Type: '2', Value: 2},
-  { Suit: 'Hearts', Type: '6', Value: 6}]
+function compare(cardA, cardB) {
+  if (cardA.Value < cardB.Value){
+    return -1;
+  }
+  if (cardA.Value > cardB.Value){
+    return 1;
+  }
+  return 0
+}
 
 
-var hand3 = [{ Suit: 'Hearts', Type: '2', Value: 1},
-  { Suit: 'Spades', Type: '2', Value: 3},
-  { Suit: 'Clubs', Type: '2', Value: 4},
-  { Suit: 'Diamonds', Type: '2', Value: 4},
-  { Suit: 'Hearts', Type: '6', Value: 4}]
 
-var hand_pair = [{ Suit: 'Hearts', Type: '2', Value: 1},
-  { Suit: 'Spades', Type: '2', Value: 3},
-  { Suit: 'Clubs', Type: '2', Value: 13},
-  { Suit: 'Diamonds', Type: '2', Value: 4},
-  { Suit: 'Hearts', Type: '6', Value: 4}]
-
-var hand_straight = [{ Suit: 'Hearts', Type: '2', Value: 4},
-  { Suit: 'Spades', Type: '2', Value: 3},
-  { Suit: 'Clubs', Type: '2', Value: 2},
-  { Suit: 'Diamonds', Type: '2', Value: 5},
-  { Suit: 'Hearts', Type: '6', Value: 6}]
-
-var hand_straightFlush = [{ Suit: 'Hearts', Type: '2', Value: 4},
-  { Suit: 'Hearts', Type: '2', Value: 3},
-  { Suit: 'Hearts', Type: '2', Value: 2},
-  { Suit: 'Hearts', Type: '2', Value: 5},
-  { Suit: 'Hearts', Type: '6', Value: 6}]
-
+function flush(hand) {
+  for (var key in hand.Suits){
+    if (hand.Suits[key].length >=5){
+      var flushSuit = hand.Suits[key]
+      flushSuit.sort(compare).reverse()
+      bestFlush = flushSuit.slice(0,5)
+      return flush_score(bestFlush)
+    }
+  }
+  return false
+}
 
 function flush_score(hand) {
   score = 0
@@ -52,81 +35,73 @@ function flush_score(hand) {
   return score
 }
 
-function flush(hand) {
-	var type = hand[0].Suit
-	for (var card in hand) {
-		if (hand[card].Suit != type) {
-			return false
-		}
-	}
-	return flush_score(hand)
-}
+
+// console.log(flush(player1.hand))
 
 function fourOfAKind(hand) {
-  type_dict = {}
-  for (var card in hand) {
-    if ((hand[card].Type) in type_dict) {
-      type_dict[hand[card].Value] += 1
+  var highCard = { Value: 2}
+  var bestFour = false
+  for (var key in hand.Types){
+    if (hand.Types[key].length === 4) {
+      bestFour = hand.Types[key]
     }
-    else {
-      type_dict[hand[card].Value] = 1
+    else if (hand.Types[key].length === 1) {
+      if (hand.Types[key][0].Value > highCard.Value){
+        highCard = hand.Types[key][0]
+      }
     }
   }
-  for (key in type_dict) {
-    if (type_dict[key] === 4) {
-      return fourOfAKind_score(type_dict)
-    }
-  } 
-  return false
+  if (bestFour){
+    bestFour.push(highCard)
+    return fourOfAKind_score(bestFour)
+  }
+  else {
+    return false
+  }
 }
 
-function fourOfAKind_score(type_dict) {
-  score = 0
-  console.log(type_dict)
-  for (key in type_dict) {
-    console.log(key)
-    if (type_dict[key] === 4) {
-      score += parseInt(key)*100
-    }
-    else {
-      score += parseInt(key)
-    }
-  }
-  return score
+// work on this
+function fourOfAKind_score(hand) {
+  return hand[0].Value * 100 + hand[4].Value
 }
+
+// console.log(fourOfAKind(player1.hand))
 
 
 function threeOfAKind(hand) {
-  type_dict = {}
-  for (var card in hand) {
-    if ((hand[card].Value) in type_dict) {
-      type_dict[hand[card].Value] += 1
+  var high = {Value: 0}
+  var low = {Value: 0}
+  var bestThree = [{Value: 0}]
+  for (var key in hand.Types){
+    if (hand.Types[key].length === 3) {
+      if (hand.Types[key][0].Value > bestThree[0].Value) {
+        bestThree = hand.Types[key]        
+      }
     }
-    else {
-      type_dict[hand[card].Value] = 1
-    }
+    if (hand.Types[key].length === 1) {
+      if (hand.Types[key][0].Value > high.Value) {
+        low = high
+        high = hand.Types[key][0]
+      }
+      else if (hand.Types[key][0].Value > low.Value) {
+        low = hand.Types[key][0]
+      }
+    } 
   }
-  for (key in type_dict) {
-    if (type_dict[key] === 3) {
-      return threeOfAKind_score(type_dict)
-    }
-  } 
-  return false
+  if (bestThree[0].Value != 0) {
+    bestThree.push(high)
+    bestThree.push(low)
+    console.log(bestThree)
+    return threeOfAKind_score(bestThree)
+  }
+  return false   
 }
 
+console.log(threeOfAKind(player1.hand))
 
-function threeOfAKind_score(type_dict) {
-  score = 0
-  for (key in type_dict) {
-    if (type_dict[key] === 3) {
-      score += Math.pow(parseInt(key),3)*100
-    }
-    else {
-      ///check
-      score += Math.pow(parseInt(key),2)
-    }
-  }
-  return score
+
+function threeOfAKind_score(hand) {
+  return hand[0].Value * 100 + hand[3].Value * 20 + hand[4].Value
 }
 
 
@@ -190,66 +165,3 @@ function fullHouse(hand) {
     return
   }
 }
-// console.log(flush(hand))
-// console.log(flush_score(hand))
-// console.log(fourOfAKind(hand2))
-// console.log(fourOfAKind_score(hand2))
-// console.log(threeOfAKind(hand))
-// console.log(pair(hand_pair))
-// console.log(straight(hand_straight))
-console.log(straightFlush(hand_straightFlush))
-
-
-
-var deck = [ { Suit: 'Clubs', Type: '2', Value: 2},
-  { Suit: 'Clubs', Type: '3', Value: 3},
-  { Suit: 'Clubs', Type: '4', Value: 4},
-  { Suit: 'Clubs', Type: '5', Value: 5},
-  { Suit: 'Clubs', Type: '6', Value: 6},
-  { Suit: 'Clubs', Type: '7', Value: 7},
-  { Suit: 'Clubs', Type: '8', Value: 8},
-  { Suit: 'Clubs', Type: '9', Value: 9},
-  { Suit: 'Clubs', Type: '10', Value: 10},
-  { Suit: 'Clubs', Type: 'Jack', Value: 11},
-  { Suit: 'Clubs', Type: 'Queen', Value: 12},
-  { Suit: 'Clubs', Type: 'King', Value: 13},
-  { Suit: 'Clubs', Type: 'Ace', Value: 14},
-  { Suit: 'Diamonds', Type: '2', Value: 2},
-  { Suit: 'Diamonds', Type: '3', Value: 3},
-  { Suit: 'Diamonds', Type: '4', Value: 4},
-  { Suit: 'Diamonds', Type: '5', Value: 5},
-  { Suit: 'Diamonds', Type: '6', Value: 6},
-  { Suit: 'Diamonds', Type: '7', Value: 7},
-  { Suit: 'Diamonds', Type: '8', Value: 8},
-  { Suit: 'Diamonds', Type: '9', Value: 9},
-  { Suit: 'Diamonds', Type: '10', Value: 10},
-  { Suit: 'Diamonds', Type: 'Jack', Value: 11},
-  { Suit: 'Diamonds', Type: 'Queen', Value: 12},
-  { Suit: 'Diamonds', Type: 'King', Value: 13},
-  { Suit: 'Diamonds', Type: 'Ace', Value: 14},
-  { Suit: 'Hearts', Type: '2', Value: 2},
-  { Suit: 'Hearts', Type: '3', Value: 3},
-  { Suit: 'Hearts', Type: '4', Value: 4},
-  { Suit: 'Hearts', Type: '5', Value: 5},
-  { Suit: 'Hearts', Type: '6', Value: 6},
-  { Suit: 'Hearts', Type: '7', Value: 7},
-  { Suit: 'Hearts', Type: '8', Value: 8},
-  { Suit: 'Hearts', Type: '9', Value: 9},
-  { Suit: 'Hearts', Type: '10', Value: 10},
-  { Suit: 'Hearts', Type: 'Jack', Value: 11},
-  { Suit: 'Hearts', Type: 'Queen', Value: 12},
-  { Suit: 'Hearts', Type: 'King', Value: 13},
-  { Suit: 'Hearts', Type: 'Ace', Value: 14},
-  { Suit: 'Spades', Type: '2', Value: 2},
-  { Suit: 'Spades', Type: '3', Value: 3},
-  { Suit: 'Spades', Type: '4', Value: 4},
-  { Suit: 'Spades', Type: '5', Value: 5},
-  { Suit: 'Spades', Type: '6', Value: 6},
-  { Suit: 'Spades', Type: '7', Value: 7},
-  { Suit: 'Spades', Type: '8', Value: 8},
-  { Suit: 'Spades', Type: '9', Value: 9},
-  { Suit: 'Spades', Type: '10', Value: 10},
-  { Suit: 'Spades', Type: 'Jack', Value: 11},
-  { Suit: 'Spades', Type: 'Queen', Value: 12},
-  { Suit: 'Spades', Type: 'King', Value: 13},
-  { Suit: 'Spades', Type: 'Ace' , Value: 14} ]
