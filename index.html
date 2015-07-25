@@ -5,6 +5,8 @@
 		<link rel="stylesheet" type="text/css" href="main.css">
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.0/lodash.js"></script>
+		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">	
+		<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
 		<script type="text/javascript" src="deck.js"></script>
 		<script type="text/javascript" src="main.js"></script>
 		<script type="text/javascript" src="player.js"></script>
@@ -14,13 +16,80 @@
 		<div id = "player1">
 			<div class = "card holecard1"> </div>
 			<div class = "card holecard2"> </div>
-		</div>
-		<div id = "board">
+			<p> Player 1 </p>
+			<div class = "currentbet"> </div>
+			<div class = "stack"> </div>
+			<div class = "dealer" > </div>
+			<div class = "buttons" style="display:none"> 
+				<button class = "fold"> Fold </button>
+				<button class = "call"> Call </button>
+				<form>
+				<input type="text" name="betamount">
+				</form>
+				<button class = "bet"> Bet </button> 
+			</div>
 		</div>
 		<div id = "player2">
 			<div class = "card holecard1"> </div>
 			<div class = "card holecard2"> </div>
+			<p> Player 2 </p>
+			<div class = "currentbet"> </div>
+			<div class = "stack"> </div>
+			<div class = "dealer" > </div>
+			<div class = "buttons" style="display:none"> 
+				<button class = "fold"> Fold </button>
+				<button class = "call"> Call </button>
+				<form>
+				<input type="text" name="betamount">
+				</form>
+				<button class = "bet"> Bet </button> 
+			</div>
+		</div>
+		<div id = "player3">
+			<div class = "card holecard1"> </div>
+			<div class = "card holecard2"> </div>
+			<p> Player 3 </p>
+			<div class = "currentbet"> </div>
+			<div class = "stack"> </div>
+			<div class = "dealer" > </div>
+			<div class = "buttons" style="display:none"> 
+				<button class = "fold"> Fold </button>
+				<button class = "call"> Call </button>
+				<form>
+				<input type="text" name="betamount">
+				</form>
+				<button class = "bet"> Bet </button> 
+			</div>
+		</div>
+		<div id = "player4">
+			<div class = "card holecard1"> </div>
+			<div class = "card holecard2"> </div>
+			<p> Player 4 </p>
+			<div class = "currentbet"> </div>
+			<div class = "stack"> </div>
+			<div class = "dealer" > </div>
+			<div class = "dealer" > </div>
+			<div class = "buttons" style="display:none"> 
+				<button class = "fold"> Fold </button>
+				<button class = "call"> Call </button>
+				<form>
+				<input type="text" name="betamount">
+				</form>
+				<button class = "bet"> Bet </button> 
+				
+			</div>
 		</div>
 
+
+		<div id = "board">
+			<div class = "card boardcard3"> </div>
+			<div class = "card boardcard4"> </div>
+			<div class = "card boardcard5"> </div>
+			<div class = "card boardcard6"> </div>
+			<div class = "card boardcard7"> </div>
+			<div class = "pot"> </div>
+
+		</div>
+		
 	</body>
 	</html>

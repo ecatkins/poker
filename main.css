@@ -1,5 +1,46 @@
+.dealer {
+	position: absolute;
+	right:20em;
+}
+
+.dealer img {
+	max-width:4em;
+	max-height:4em;
+}
+
+
 .card {
-	display: inline
+	display: inline;
+	position: absolute;
+	top: 2em;
+}
+
+.holecard1 {
+	left:25em;
+}
+
+.holecard2 {
+	left:35em;
+}
+
+.boardcard3 {
+	left:20em;
+}
+
+.boardcard4 {
+	left:25em;
+}
+
+.boardcard5 {
+	left:30em;
+}
+
+.boardcard6 {
+	left:35em;
+}
+
+.boardcard7 {
+	left:40em;
 }
 
 
@@ -9,14 +50,61 @@
 	position:relative;
 }
 
+#player2 {
+	height: 10em;
+	border: green solid 0.2em;
+	position: relative;
+}
+
+#player3 {
+	height: 10em;
+	border: violet solid 0.2em;
+	position: relative;
+}
+
+#player4 {
+	height: 10em;
+	border: gray solid 0.2em;
+	position: relative;
+}
+
 #board {
 	height: 10em;
 	border: red solid 0.2em;
 	position: relative;
 }
 
-#player2 {
-	height: 10em;
-	border: green solid 0.2em;
+
+.buttons {
+	position: absolute;
+	left:60em;
+}
+
+.fold {
 	position: relative;
+	max-width: 6em;
+	max-height: 2em;
+}
+
+
+.call {
+	position: relative;
+	max-width: 6em;
+	max-height: 2em;
+}
+
+
+
+p {
+	position:absolute;
+}
+
+.currentbet {
+	position: absolute;
+	top: 4em;
+}
+
+.stack {
+	position: absolute;
+	top: 2em;
 }
