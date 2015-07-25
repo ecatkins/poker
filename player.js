@@ -34,6 +34,7 @@ var player = function(name,id){
     this.hand = new blankHand().hand
     ///harcoded chips
     this.chips = 1500
+    this.currentBet = 0
 }
 
 
@@ -69,9 +70,11 @@ var numPlayers = 2
 ///hardcoded for the moment
 var player1 = new player("Eddy",1)
 var player2 = new player("Adam",2)
+var player3 = new player("Billy",3)
+var player4 = new player("Greg",4)
 // var player3 = new player("Computer")
 
-var playerList = [player1, player2]
+var currentPlayerList = [player1, player2,player3,player4]
 
 
 
