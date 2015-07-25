@@ -1,0 +1,22 @@
+.card {
+	display: inline
+}
+
+
+#player1 {
+	height: 10em;
+	border: blue solid 0.2em;
+	position:relative;
+}
+
+#board {
+	height: 10em;
+	border: red solid 0.2em;
+	position: relative;
+}
+
+#player2 {
+	height: 10em;
+	border: green solid 0.2em;
+	position: relative;
+}
