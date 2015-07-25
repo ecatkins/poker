@@ -4,10 +4,10 @@ var blankHand = function(){
     this.hand = {
         "Cards":[],
         "Types":{
-            "A": [],
-            "K": [],
-            "Q": [],
-            "J": [],
+            "Ace": [],
+            "King": [],
+            "Queen": [],
+            "Jack": [],
             "10": [],
             "9": [],
             "8": [],
@@ -29,7 +29,6 @@ var blankHand = function(){
 
 
 var player = function(){
-
     this.hand = new blankHand().hand
 }
 
@@ -47,15 +46,13 @@ player.prototype.clearHand = function() {
 
 var player1 = new player()
 
-
-
-var card1 = { Suit: 'Hearts', Type: 'J', Value: 11}
+var card1 = { Suit: 'Hearts', Type: 'Jack', Value: 11}
 var card2 = { Suit: 'Clubs', Type: '10', Value: 10}
 var card3 = { Suit: 'Clubs', Type: '7', Value: 7}
-var card4 = { Suit: 'Clubs', Type: '8', Value: 8}
-var card5 = { Suit: 'Spades', Type: '4', Value: 4}
+var card4 = { Suit: 'Clubs', Type: 'Queen', Value: 12}
+var card5 = { Suit: 'Hearts', Type: '4', Value: 4}
 var card6 = { Suit: 'Clubs', Type: '9', Value: 9}
-var card7 = { Suit: 'Clubs', Type: 'J', Value: 11}
+var card7 = { Suit: 'Clubs', Type: 'Ace', Value: 13}
 
 
 player1.addCard(card1)
@@ -70,5 +67,3 @@ console.log(player1.hand)
 
 
 
-// player1.clearHand()
-// console.log(player1.hand)
