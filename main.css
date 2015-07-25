@@ -1,3 +1,14 @@
+.dealer {
+	position: absolute;
+	right:20em;
+}
+
+.dealer img {
+	max-width:4em;
+	max-height:4em;
+}
+
+
 .card {
 	display: inline;
 	position: absolute;
@@ -63,3 +74,37 @@
 	position: relative;
 }
 
+
+.buttons {
+	position: absolute;
+	left:60em;
+}
+
+.fold {
+	position: relative;
+	max-width: 6em;
+	max-height: 2em;
+}
+
+
+.call {
+	position: relative;
+	max-width: 6em;
+	max-height: 2em;
+}
+
+
+
+p {
+	position:absolute;
+}
+
+.currentbet {
+	position: absolute;
+	top: 4em;
+}
+
+.stack {
+	position: absolute;
+	top: 2em;
+}

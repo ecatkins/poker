@@ -1,22 +1,58 @@
 var game = function(playerList) {
 	this.playerList = playerList
-	dealerCounter = 0
-	var turn1 = new turn(this.playerList)
-	// turn1.postBlinds()
-	turn1.dealHoleCards()	
-	turn1.dealFlop()
-	turn1.dealTurn()
-	turn1.dealRiver()
+	this.dealerCounter = 0
+	this.bigBlind = 30
+	this.smallBlind = 15
+	var turn1 = new turn(this.playerList,this.dealerCounter,this.smallBlind,this.bigBlind)
+	turn1.postBlinds()
+	// turn1.dealHoleCards()	
+	// turn1.dealFlop()
+	// turn1.dealTurn()
+	// turn1.dealRiver()
 }
 
-var turn = function(playerList) {
+var turn = function(playerList, dealerCounter, smallBlind, bigBlind) {
 	this.deck = _.shuffle(deck)
 	this.deckCount = 0
 	this.pot = 0
 	this.playerList = playerList
+	this.dealerCounter = dealerCounter
+	this.smallBlind = smallBlind
+	this.bigBlind = bigBlind
+	this.currentPlayerNumber = this.dealerCounter
+	this.currentPlayer = this.playerList[this.currentPlayerNumber]
 }
 
-// 
+///this function makes the player list is circular
+turn.prototype.changeCurrentPlayer = function() {
+	var numPlayers = this.playerList.length
+	if (this.currentPlayerNumber === numPlayers - 1) {
+		this.currentPlayerNumber = 0
+	}
+	else {
+		this.currentPlayerNumber += 1
+	}
+	this.currentPlayer = this.playerList[this.currentPlayerNumber]
+}
+
+turn.prototype.postBlinds = function() {
+	///Add dealer chip
+	this.dealerChipViews()
+	///small blind
+	this.changeCurrentPlayer()
+	this.currentPlayer.chips -= this.smallBlind
+	this.currentPlayer.currentBet += this.smallBlind
+	/// big blind
+	this.changeCurrentPlayer()
+	this.currentPlayer.chips -= this.bigBlind
+	this.currentPlayer.currentBet += this.bigBlind
+	///pot
+	this.pot += this.smallBlind + this.bigBlind
+	/// update info views
+	this.updatedInformationViews()
+	///calls hole cards
+	return this.dealHoleCards()
+}
 
 turn.prototype.dealHoleCards = function() {
 	var playerList = this.playerList
@@ -28,8 +64,54 @@ turn.prototype.dealHoleCards = function() {
 		this.deckCount += 2
 	}
 	this.updatedInformationViews(playerList)
+	return this.playFlopRound()
 }
 
+turn.prototype.playFlopRound = function() {
+	inHand = []
+	currentBetAmount = this.bigBlind
+	for (player in this.playerList) {
+		inHand.push(this.playerList[player])
+	}
+	count = 0
+	while (count < 5) {
+		this.showButtons()
+		this.playerActs()
+		this.hideButtons()
+		if (this.checkRoundEnd === false) {
+			this.changeCurrentPlayer()
+			count += 1
+		}
+		elif {
+			return this.dealTurn()
+		}
+	}
+}
+
+turn.prototype.checkRoundEnd = function(inHand) {
+	for(var i = 1; i < inHand.length; i++) {
+		if(inHand[i].currentBet !== inHand[0].currentBet)
+			return false
+	}
+	return true;
+}
+
+turn.prototype.playerActs = function() {
+	
+}
+
+
+turn.prototype.showButtons = function() {
+	ID = this.currentPlayer.playerID
+	$('#player'+ID).find("[Name=betamount]").attr("min",this.currentBetAmount + this.bigBlind)
+	$('#player'+ID).find("[Name=betamount]").attr("max",this.currentPlayer.chips)
+	$('#player'+ID).find(".buttons").attr("style","display:inline")
+}
+
+turn.prototype.hideButtons = function() {
+	ID = this.currentPlayer.playerI
+	$('#player'+ID).find(".buttons").attr("style","display:none")
+}
 
 turn.prototype.dealFlop = function () {
 	var playerList = this.playerList
@@ -101,9 +183,14 @@ turn.prototype.updatedInformationViews = function() {
 	for (player in this.playerList) {
 		ID = this.playerList[player].playerID
 		$('#player'+ID).find(".stack").text("Current Stack: " + this.playerList[player].chips)
-		$('#player'+ID).find(".bet").text("Bet amount: " + this.playerList[player].currentBet)
+		$('#player'+ID).find(".currentbet").text("Bet amount: " + this.playerList[player].currentBet)
 	}
 	$(".pot").text("Current pot amount: " + this.pot)
+}
+
+turn.prototype.dealerChipViews = function () {
+	ID = this.currentPlayer.playerID
+	$('#player'+ID).find(".dealer").html("<img src ='images/dealer.jpg'>")
 }
 
 // $('#player'+ID).find(".stack").text("Current Stack: " + player.chips)
