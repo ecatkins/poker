@@ -49,13 +49,13 @@ var player1 = new player()
 
 
 
-var card1 = { Suit: 'Hearts', Type: '2', Value: 2}
-var card2 = { Suit: 'Diamonds', Type: '2', Value: 2}
-var card3 = { Suit: 'Clubs', Type: '4', Value: 4}
-var card4 = { Suit: 'Spades', Type: '2', Value: 2}
-var card5 = { Suit: 'Clubs', Type: '6', Value: 6}
-var card6 = { Suit: 'Hearts', Type: '5', Value: 5}
-var card7 = { Suit: 'Clubs', Type: '7', Value: 7}
+var card1 = { Suit: 'Hearts', Type: 'J', Value: 11}
+var card2 = { Suit: 'Clubs', Type: '10', Value: 10}
+var card3 = { Suit: 'Clubs', Type: '7', Value: 7}
+var card4 = { Suit: 'Clubs', Type: '8', Value: 8}
+var card5 = { Suit: 'Spades', Type: '4', Value: 4}
+var card6 = { Suit: 'Clubs', Type: '9', Value: 9}
+var card7 = { Suit: 'Clubs', Type: 'J', Value: 11}
 
 
 player1.addCard(card1)
