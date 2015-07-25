@@ -35,6 +35,7 @@ var player = function(name,id){
     ///harcoded chips
     this.chips = 1500
     this.currentBet = 0
+    this.inHand = true
 }
 
 

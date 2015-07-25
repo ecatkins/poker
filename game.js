@@ -21,6 +21,8 @@ var turn = function(playerList, dealerCounter, smallBlind, bigBlind) {
 	this.bigBlind = bigBlind
 	this.currentPlayerNumber = this.dealerCounter
 	this.currentPlayer = this.playerList[this.currentPlayerNumber]
+	this.inHand = []
+	this.currentBetAmount = this.bigBlind
 }
 
 ///this function makes the player list is circular
@@ -33,6 +35,16 @@ turn.prototype.changeCurrentPlayer = function() {
 		this.currentPlayerNumber += 1
 	}
 	this.currentPlayer = this.playerList[this.currentPlayerNumber]
+}
+
+/// this function sets the list that shows who hasn't folded
+turn.prototype.updateInHand = function() {
+	this.hand = []
+	for (player in this.playerList) {
+		if (this.playerList[player].inHand != false) {
+			this.inHand.push(this.playerList[player])
+		}	
+	}
 }
 
 turn.prototype.postBlinds = function() {
@@ -50,6 +62,8 @@ turn.prototype.postBlinds = function() {
 	this.pot += this.smallBlind + this.bigBlind
 	/// update info views
 	this.updatedInformationViews()
+	/// Pushes all players to the active list
+	this.updateInHand()
 	///calls hole cards
 	return this.dealHoleCards()
 }
@@ -68,48 +82,83 @@ turn.prototype.dealHoleCards = function() {
 }
 
 turn.prototype.playFlopRound = function() {
-	inHand = []
-	currentBetAmount = this.bigBlind
-	for (player in this.playerList) {
-		inHand.push(this.playerList[player])
-	}
-	count = 0
-	while (count < 5) {
-		this.showButtons()
+	this.hideButtons()
+	this.updatedInformationViews()
+	this.changeCurrentPlayer()
+	this.updateInHand()
+	this.showButtons()
+	if (this.currentPlayer.inHand === true) {
 		this.playerActs()
-		this.hideButtons()
-		if (this.checkRoundEnd === false) {
-			this.changeCurrentPlayer()
-			count += 1
-		}
-		elif {
-			return this.dealTurn()
-		}
+	}
+	else {
+		this.changeCurrentPlayer()
+		return this.playFlopRound()
 	}
 }
+	
+
+/// this function waits for a player to act i.e. click on something
+turn.prototype.playerActs = function() {
+	var currentPlayer = this.currentPlayer
+	var ID = currentPlayer.playerID
+	var self = this
+	$('#player'+ID).find(".fold").on('click', function () {
+		currentPlayer.inHand = false
+		$('#player'+ID).find("img").hide()
+		if (self.checkRoundEnd() === false) {
+			return self.playFlopRound()
+		}
+		else {
+			return self.nextRound()
+		}
+	} )
+	$('#player'+ID).find(".call").on('click', function () {
+		var callDiff = self.currentBetAmount - self.currentPlayer.currentBet
+		self.pot += callDiff
+		self.currentPlayer.chips -=  callDiff
+		self.currentPlayer.currentBet = self.currentBetAmount
+		if (self.checkRoundEnd() === false) {
+			return self.playFlopRound()
+		}
+		else {
+			return self.nextRound()
+		}
+	})
+	$('#player'+ID).find(".bet").on('click', function () {
+		var betSize = parseInt($('#player'+ID).find('[name=betamount]').val());
+		var betDiff = self.currentBetAmount - self.changeCurrentPlayer.currentBet
+		self.currentBetAmount = betSize
+		self.currentPlayer.chips -= betDiff
+		self.currentPlayer.currentBet = self.currentBetAmount
+		if (self.checkRoundEnd() === false) {
+			return self.playFlopRound()
+		}
+		else {
+			return self.nextRound()
+		}
+	})
+}
+
+
 
 turn.prototype.checkRoundEnd = function(inHand) {
-	for(var i = 1; i < inHand.length; i++) {
-		if(inHand[i].currentBet !== inHand[0].currentBet)
+	for(var i = 1; i < this.inHand.length; i++) {
+		if(this.inHand[i].currentBet !== this.inHand[0].currentBet)
 			return false
 	}
 	return true;
 }
 
-turn.prototype.playerActs = function() {
-	
-}
-
 
 turn.prototype.showButtons = function() {
-	ID = this.currentPlayer.playerID
+	var ID = this.currentPlayer.playerID
 	$('#player'+ID).find("[Name=betamount]").attr("min",this.currentBetAmount + this.bigBlind)
 	$('#player'+ID).find("[Name=betamount]").attr("max",this.currentPlayer.chips)
 	$('#player'+ID).find(".buttons").attr("style","display:inline")
 }
 
 turn.prototype.hideButtons = function() {
-	ID = this.currentPlayer.playerI
+	ID = this.currentPlayer.playerID
 	$('#player'+ID).find(".buttons").attr("style","display:none")
 }
 
