@@ -21,6 +21,7 @@ function compare(cardA, cardB) {
 
 
 
+
 function flush(hand) {
   for (var key in hand.Suits){
     if (hand.Suits[key].length >=5){
@@ -277,11 +278,19 @@ function TwoPair_score(hand) {
   return hand[0].Value * 400 + hand[2].Value * 20  + hand[4].Value
 }
 
-function HighCard(hand) {
+function highCard(hand) {
   var cards = hand['Cards']
   cards.sort(compare).reverse()
   best5 = cards.slice(0,5)
-  return [best5, true]
+  return [best5, highCard_score(best5)]
 }
 
-console.log(HighCard(player1.hand)) 
+function highCard_score(hand) {
+  return hand[0].Value * 160000 + hand[1].Value * 8000 + hand[2].Value * 400 + hand[3].Value * 20 + hand[4].Value
+}
+
+
+// console.log(highCard(player1.hand)) 
+
+
+
