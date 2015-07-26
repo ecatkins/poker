@@ -55,16 +55,16 @@ player.prototype.clearHand = function() {
 /// i.e. straigh flush = index[0] fourofAkind = index[1] etc
 player.prototype.handScore = function() {
     var playerHand = this.hand
-    allHands = []
+    var hand = []
     var handTypes = [straightFlush, fourOfAKind,fullHouse, flush, straight, threeOfAKind, twoPair, pair, highCard]
-    function assessHands(func,index,array) {
-      if (func(playerHand)) {
-        allHands.push([index, func(playerHand)[1], func(playerHand)[0]])
-      }
+    for (var handType in handTypes) {
+        if (handTypes[handType](playerHand)) {
+            return [handType, handTypes[handType](playerHand)[1], handTypes[handType](playerHand)[0]]
+        }
     }
-    handTypes.forEach(assessHands)
-    return allHands[0]
+    return false
 }
+
 
 
 var numPlayers = 2

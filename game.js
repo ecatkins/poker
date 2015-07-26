@@ -1,13 +1,22 @@
 var game = function(playerList) {
 	this.playerList = playerList
 	this.dealerCounter = 0
-	this.bigBlind = 30
 	this.smallBlind = 15
-	var round1 = new round(this.playerList,this.dealerCounter,this.smallBlind,this.bigBlind)
-	round1.postBlinds()
+	this.bigBlind = 30
+	this.gamePlay()
 }
 
-var round = function(playerList, dealerCounter, smallBlind, bigBlind) {
+
+
+game.prototype.gamePlay = function() {
+	thisGame = this
+	var cycle1 = new round(this.playerList,this.dealerCounter,this.smallBlind,this.bigBlind,thisGame)
+	return cycle1.postBlinds()
+}
+
+
+
+var round = function(playerList, dealerCounter, smallBlind, bigBlind, thisGame) {
 	this.deck = _.shuffle(deck)
 	this.deckCount = 0
 	this.pot = 0
@@ -19,6 +28,8 @@ var round = function(playerList, dealerCounter, smallBlind, bigBlind) {
 	this.currentPlayer = this.playerList[this.currentPlayerNumber]
 	this.inHand = []
 	this.currentBetAmount = this.bigBlind
+	this.game = thisGame
+	this.endRoundCounter = 0
 }
 
 
@@ -71,8 +82,12 @@ round.prototype.playPreFlopRound = function() {
 	this.updatedInformationViews()
 	this.changeCurrentPlayer()
 	this.updateInHand()
+	if (this.inHand.length === 1) {
+		return this.awardPot(this.inHand[0])
+	}
 	this.showButtons()
 	if (this.currentPlayer.inHand === true) {
+		this.endRoundCounter += 1
 		return this.playerActsPreFlop()
 	}
 	else {
@@ -90,7 +105,7 @@ round.prototype.playerActsPreFlop = function() {
 
 	$('#player'+ID).find(".fold").on('click', function () {
 		currentPlayer.inHand = false
-		$('#player'+ID).find("img").hide()
+		$('#player'+ID).find(".card").hide()
 		$('#player'+ID).find(".fold").off("click")
 		$('#player'+ID).find(".call").off("click")
 		$('#player'+ID).find(".bet").off("click")
@@ -111,11 +126,9 @@ round.prototype.playerActsPreFlop = function() {
 		$('#player'+ID).find(".fold").off("click")
 		$('#player'+ID).find(".bet").off("click")
 		if (self.checkRoundEnd() === false) {
-			console.log("Here")
 			return self.playPreFlopRound()
 		}
 		else {
-			console.log("Here2")
 			return self.dealFlop()
 		}
 	})
@@ -128,9 +141,6 @@ round.prototype.playerActsPreFlop = function() {
 		self.currentBetAmount = betSize
 		self.currentPlayer.chips -= betDiff
 		self.currentPlayer.currentBet = betSize
-		console.log(betSize)
-		console.log(self.pot)
-		console.log(self.currentPlayer.chips)
 		$('#player'+ID).find(".bet").off("click")
 		$('#player'+ID).find(".call").off("click")
 		$('#player'+ID).find(".fold").off("click")
@@ -164,7 +174,9 @@ round.prototype.dealFlop = function () {
 }
 
 round.prototype.resetForFlop = function () {
+	this.endRoundCounter = 0
 	this.hideButtons()
+	this.currentBetAmount = 0
 	this.currentPlayerNumber = this.dealerCounter
 	for (player in this.playerList) {
 		this.playerList[player].currentBet =0
@@ -177,8 +189,12 @@ round.prototype.playFlopRound = function() {
 	this.updatedInformationViews()
 	this.changeCurrentPlayer()
 	this.updateInHand()
+	if (this.inHand.length === 1) {
+		return this.awardPot(this.inHand[0])
+	}
 	this.showButtons()
 	if (this.currentPlayer.inHand === true) {
+		this.endRoundCounter += 1
 		return this.playerActsFlop()
 	}
 	else {
@@ -194,7 +210,7 @@ round.prototype.playerActsFlop = function() {
 	var self = this
 	$('#player'+ID).find(".fold").on('click', function () {
 		currentPlayer.inHand = false
-		$('#player'+ID).find("img").hide()
+		$('#player'+ID).find(".card").hide()
 		$('#player'+ID).find(".fold").off("click")
 		$('#player'+ID).find(".call").off("click")
 		$('#player'+ID).find(".bet").off("click")
@@ -214,11 +230,9 @@ round.prototype.playerActsFlop = function() {
 		$('#player'+ID).find(".call").off("click")
 		$('#player'+ID).find(".bet").off("click")
 		if (self.checkRoundEnd() === false) {
-			console.log("Here")
 			return self.playFlopRound()
 		}
 		else {
-			console.log("Here2")
 			return self.dealTurn()
 		}
 	})
@@ -262,9 +276,11 @@ round.prototype.dealTurn = function () {
 
 round.prototype.resetForTurn = function () {
 	this.hideButtons()
+	this.endRoundCounter = 0
+	this.currentBetAmount = 0
 	this.currentPlayer =this.playerList[this.dealerCounter]
 	for (player in this.playerList) {
-		this.playerList[player].currentBet =0
+		this.playerList[player].currentBet = 0
 	}
 	return this.playTurnRound()
 }
@@ -274,8 +290,12 @@ round.prototype.playTurnRound = function() {
 	this.updatedInformationViews()
 	this.changeCurrentPlayer()
 	this.updateInHand()
+	if (this.inHand.length === 1) {
+		return this.awardPot(this.inHand[0])
+	}
 	this.showButtons()
 	if (this.currentPlayer.inHand === true) {
+		this.endRoundCounter += 1
 		return this.playerActsTurn()
 	}
 	else {
@@ -290,10 +310,10 @@ round.prototype.playerActsTurn = function() {
 	var self = this
 	$('#player'+ID).find(".fold").on('click', function () {
 		currentPlayer.inHand = false
+		$('#player'+ID).find(".card").hide()
 		$('#player'+ID).find(".fold").off("click")
 		$('#player'+ID).find(".call").off("click")
 		$('#player'+ID).find(".bet").off("click")
-		$('#player'+ID).find("img").hide()
 		if (self.checkRoundEnd() === false) {
 			return self.playTurnRound()
 		}
@@ -355,7 +375,9 @@ round.prototype.dealRiver = function () {
 
 round.prototype.resetForRiver = function () {
 	this.hideButtons()
+	this.currentBetAmount = 0
 	this.currentPlayer =this.playerList[this.dealerCounter]
+	this.endRoundCounter = 0
 	for (player in this.playerList) {
 		this.playerList[player].currentBet =0
 	}
@@ -367,8 +389,12 @@ round.prototype.playRiverRound = function() {
 	this.updatedInformationViews()
 	this.changeCurrentPlayer()
 	this.updateInHand()
+	if (this.inHand.length === 1) {
+		return this.awardPot(this.inHand[0])
+	}
 	this.showButtons()
 	if (this.currentPlayer.inHand === true) {
+		this.endRoundCounter  += 1
 		return this.playerActsRiver()
 	}
 	else {
@@ -384,15 +410,16 @@ round.prototype.playerActsRiver = function() {
 	var self = this
 	$('#player'+ID).find(".fold").on('click', function () {
 		currentPlayer.inHand = false
+		$('#player'+ID).find(".card").hide()
 		$('#player'+ID).find(".fold").off("click")
 		$('#player'+ID).find(".call").off("click")
 		$('#player'+ID).find(".bet").off("click")
-		$('#player'+ID).find("img").hide()
 		if (self.checkRoundEnd() === false) {
 			return self.playRiverRound()
 		}
 		else {
-			return console.log("FINISHED")
+			console.log("FINISHED")
+			return self.handComparison()
 		}
 	} )
 	$('#player'+ID).find(".call").on('click', function () {
@@ -407,7 +434,7 @@ round.prototype.playerActsRiver = function() {
 			return self.playRiverRound()
 		}
 		else {
-			return console.log("FINISHED")
+			return self.handComparison()
 		}
 	})
 	$('#player'+ID).find(".bet").on('click', function () {
@@ -425,8 +452,7 @@ round.prototype.playerActsRiver = function() {
 			return self.playRiverRound()
 		}
 		else {
-			this.handComparison
-			console.log("FINISHED")
+			return self.handComparison()	
 		}
 	})
 }
@@ -455,44 +481,67 @@ function compareScore(player1, player2) {
 
 function indexComparison(inHandPlayers) {
 	var sameHand = []
-	for(var i = 1; i < inHandPlayerslength; i++) {
+	for(var i = 0; i < inHandPlayers.length; i++) {
 		if(inHandPlayers[i].handScore()[0] === inHandPlayers[0].handScore()[0]) {
 			sameHand.push(inHandPlayers[i])
 		}
 		else {
+			console.log(sameHand)
 			return sameHand
 		}
 	}
+	console.log(sameHand)
 	return sameHand
 }
-
-
-
-
-
 
 round.prototype.handComparison = function() {
 	this.hideButtons()
 	this.updatedInformationViews()
 	this.updateInHand()
-	console.log(this.inHand)
 	this.inHand.sort(compareIndex)
-	if (indexComparison(this.inHand) === []) {
-		return this.inHand[0]
+	var winningPLayer = null
+	if (indexComparison(this.inHand).length === 1) {
+		winningPlayer = this.inHand[0]
 	}
 	else {
 		var sameHand = indexComparison(this.inHand)
 		sameHand.sort(compareScore)
-		return sameHand[0]
-
+		winningPlayer = sameHand[0]
 	}
+	onsole.log(winningPlayer.handScore())
+	return this.awardPot(winningPlayer)
+}
 
+round.prototype.awardPot  = function(winningPlayer) {
+	winningPlayer.chips += this.pot
+	///Remove dealer chip
+	$(".dealer").empty()
+	///Remove all cards from players but show divs
+	$(".card").empty()
+	$(".card").show()
+	///All players in hand
+	this.resetPlayerInHand()
+	///Update information
+	this.updatedInformationViews()
+	this.changeDealerCounter()
+	return this.game.gamePlay()
 }
 
 
 ////////////////// MISC////////////////
 
 ///this function makes the player list is circular
+
+round.prototype.changeDealerCounter = function() {
+	var numPlayers = this.playerList.length
+	if (this.currentPlayerNumber === numPlayers - 1) {
+		this.game.dealerCounter = 0
+	}
+	else {
+		this.game.dealerCounter += 1
+	}
+}
+
 round.prototype.changeCurrentPlayer = function() {
 	var numPlayers = this.playerList.length
 	if (this.currentPlayerNumber === numPlayers - 1) {
@@ -515,6 +564,9 @@ round.prototype.updateInHand = function() {
 }
 
 round.prototype.checkRoundEnd = function() {
+	if (this.endRoundCounter < this.inHand.length) {
+		return false
+	}
 	for(var i = 1; i < this.inHand.length; i++) {
 		if(this.inHand[i].currentBet !== this.inHand[0].currentBet)
 			return false
@@ -577,6 +629,14 @@ round.prototype.updatedInformationViews = function() {
 round.prototype.dealerChipViews = function () {
 	ID = this.currentPlayer.playerID
 	$('#player'+ID).find(".dealer").html("<img src ='images/dealer.jpg'>")
+}
+
+round.prototype.resetPlayerInHand = function () {
+	this.playerList.forEach(function(player) {
+		player.inHand = true
+		player.clearHand()
+		player.currentBet = 0
+	})
 }
 
 // $('#player'+ID).find(".stack").text("Current Stack: " + player.chips)
