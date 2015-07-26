@@ -21,27 +21,7 @@ var round = function(playerList, dealerCounter, smallBlind, bigBlind) {
 	this.currentBetAmount = this.bigBlind
 }
 
-///this function makes the player list is circular
-round.prototype.changeCurrentPlayer = function() {
-	var numPlayers = this.playerList.length
-	if (this.currentPlayerNumber === numPlayers - 1) {
-		this.currentPlayerNumber = 0
-	}
-	else {
-		this.currentPlayerNumber += 1
-	}
-	this.currentPlayer = this.playerList[this.currentPlayerNumber]
-}
 
-/// this function sets the list that shows who hasn't folded
-round.prototype.updateInHand = function() {
-	this.hand = []
-	for (player in this.playerList) {
-		if (this.playerList[player].inHand != false) {
-			this.inHand.push(this.playerList[player])
-		}	
-	}
-}
 
 round.prototype.postBlinds = function() {
 	///Add dealer chip
@@ -64,26 +44,7 @@ round.prototype.postBlinds = function() {
 	return this.dealHoleCards()
 }
 
-round.prototype.checkRoundEnd = function(inHand) {
-	for(var i = 1; i < this.inHand.length; i++) {
-		if(this.inHand[i].currentBet !== this.inHand[0].currentBet)
-			return false
-	}
-	return true;
-}
 
-
-round.prototype.showButtons = function() {
-	var ID = this.currentPlayer.playerID
-	$('#player'+ID).find("[Name=betamount]").attr("min",this.currentBetAmount + this.bigBlind)
-	$('#player'+ID).find("[Name=betamount]").attr("max",this.currentPlayer.chips)
-	$('#player'+ID).find(".buttons").attr("style","display:inline")
-}
-
-round.prototype.hideButtons = function() {
-	ID = this.currentPlayer.playerID
-	$('#player'+ID).find(".buttons").attr("style","display:none")
-}
 
 
 ////////////////// PRE FLOP ACTION /////////////////  /////////////////  /////////////////  ///////////////// 
@@ -410,6 +371,54 @@ round.prototype.playerActsRiver = function() {
 }
 
 ////////////////// COMPARE CARDS /////////////////  /////////////////  /////////////////  ///////////////// 
+
+
+
+////////////////// MISC////////////////
+
+///this function makes the player list is circular
+round.prototype.changeCurrentPlayer = function() {
+	var numPlayers = this.playerList.length
+	if (this.currentPlayerNumber === numPlayers - 1) {
+		this.currentPlayerNumber = 0
+	}
+	else {
+		this.currentPlayerNumber += 1
+	}
+	this.currentPlayer = this.playerList[this.currentPlayerNumber]
+}
+
+/// this function sets the list that shows who hasn't folded
+round.prototype.updateInHand = function() {
+	this.hand = []
+	for (player in this.playerList) {
+		if (this.playerList[player].inHand != false) {
+			this.inHand.push(this.playerList[player])
+		}	
+	}
+}
+
+round.prototype.checkRoundEnd = function(inHand) {
+	for(var i = 1; i < this.inHand.length; i++) {
+		if(this.inHand[i].currentBet !== this.inHand[0].currentBet)
+			return false
+	}
+	return true;
+}
+
+
+round.prototype.showButtons = function() {
+	var ID = this.currentPlayer.playerID
+	$('#player'+ID).find("[Name=betamount]").attr("min",this.currentBetAmount + this.bigBlind)
+	$('#player'+ID).find("[Name=betamount]").attr("max",this.currentPlayer.chips)
+	$('#player'+ID).find(".buttons").attr("style","display:inline")
+}
+
+round.prototype.hideButtons = function() {
+	ID = this.currentPlayer.playerID
+	$('#player'+ID).find(".buttons").attr("style","display:none")
+}
+
 
 function dealHoleCardsViews (player) {
 	/// displays cards

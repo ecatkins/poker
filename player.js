@@ -51,7 +51,8 @@ player.prototype.clearHand = function() {
 }
 
 
-
+//// This loops through all players crads and returns its score (compares within hand type) and its index
+/// i.e. straigh flush = index[0] fourofAkind = index[1] etc
 player.prototype.handScore = function() {
     var playerHand = this.hand
     allHands = []
@@ -81,25 +82,6 @@ var currentPlayerList = [player1, player2,player3,player4]
 
 
 
-// var card1 = { Suit: 'Hearts', Type: 'Jack', Value: 11}
-// var card2 = { Suit: 'Clubs', Type: '10', Value: 10}
-// var card3 = { Suit: 'Clubs', Type: '7', Value: 7}
-// var card4 = { Suit: 'Clubs', Type: 'Queen', Value: 12}
-// var card5 = { Suit: 'Hearts', Type: '4', Value: 4}
-// var card6 = { Suit: 'Clubs', Type: '9', Value: 9}
-// var card7 = { Suit: 'Clubs', Type: 'Ace', Value: 13}
 
-
-// player1.addCard(card1)
-// player1.addCard(card2)
-// player1.addCard(card3)
-// player1.addCard(card4)
-// player1.addCard(card5)
-// player1.addCard(card6)
-// player1.addCard(card7)
-
-// console.log(player1.hand)
-
-// console.log(player1.handScore())
 
 
