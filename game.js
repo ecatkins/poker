@@ -58,6 +58,10 @@ round.prototype.dealHoleCards = function() {
 	dealHoleCardsViews(playerList[player])
 		this.deckCount += 2
 	}
+	console.log("After Hole cards")
+	console.log(playerList)
+
+
 	this.updatedInformationViews(playerList)
 	return this.playPreFlopRound()
 }
@@ -69,9 +73,10 @@ round.prototype.playPreFlopRound = function() {
 	this.updateInHand()
 	this.showButtons()
 	if (this.currentPlayer.inHand === true) {
-		this.playerActsPreFlop()
+		return this.playerActsPreFlop()
 	}
 	else {
+		this.hideButtons()
 		this.changeCurrentPlayer()
 		return this.playPreFlopRound()
 	}
@@ -83,9 +88,11 @@ round.prototype.playerActsPreFlop = function() {
 	var currentPlayer = this.currentPlayer
 	var ID = currentPlayer.playerID
 	var self = this
+
 	$('#player'+ID).find(".fold").on('click', function () {
 		currentPlayer.inHand = false
 		$('#player'+ID).find("img").hide()
+		$('#player'+ID).find(".fold").off("click")
 		if (self.checkRoundEnd() === false) {
 			return self.playPreFlopRound()
 		}
@@ -93,18 +100,23 @@ round.prototype.playerActsPreFlop = function() {
 			return self.dealFlop()
 		}
 	} )
+
 	$('#player'+ID).find(".call").on('click', function () {
 		var callDiff = self.currentBetAmount - self.currentPlayer.currentBet
 		self.pot += callDiff
 		self.currentPlayer.chips -=  callDiff
 		self.currentPlayer.currentBet = self.currentBetAmount
+		$('#player'+ID).find(".call").off("click")
 		if (self.checkRoundEnd() === false) {
+			console.log("Here")
 			return self.playPreFlopRound()
 		}
 		else {
+			console.log("Here2")
 			return self.dealFlop()
 		}
 	})
+
 	$('#player'+ID).find(".bet").on('click', function () {
 		var betSize = parseInt($('#player'+ID).find('[name=betamount]').val());
 		var betDiff = self.currentBetAmount - self.changeCurrentPlayer.currentBet
@@ -112,6 +124,7 @@ round.prototype.playerActsPreFlop = function() {
 		self.currentBetAmount = betSize
 		self.currentPlayer.chips -= betDiff
 		self.currentPlayer.currentBet = self.currentBetAmount
+		$('#player'+ID).find(".bet").off("click")
 		if (self.checkRoundEnd() === false) {
 			return self.playPreFlopRound()
 		}
@@ -127,13 +140,14 @@ round.prototype.playerActsPreFlop = function() {
 
 
 round.prototype.dealFlop = function () {
-	console.log(this.playerList)
 	var playerList = this.playerList
 	this.deck.slice(this.deckCount,this.deckCount+3).forEach(function(card){
 		for (player in playerList) {
 			playerList[player].addCard(card)
 		}
 	}) 
+	console.log("After Flop")
+	console.log(playerList)
 	dealFlopViews(playerList)
 	this.deckCount += 3
 	this.updatedInformationViews(playerList)
@@ -141,7 +155,8 @@ round.prototype.dealFlop = function () {
 }
 
 round.prototype.resetForFlop = function () {
-	this.currentPlayer =this.playerList[this.currentPlayerNumber]
+	this.hideButtons()
+	this.currentPlayer =this.playerList[this.dealerCounter]
 	for (player in this.playerList) {
 		this.playerList[player].currentBet =0
 	}
@@ -155,9 +170,10 @@ round.prototype.playFlopRound = function() {
 	this.updateInHand()
 	this.showButtons()
 	if (this.currentPlayer.inHand === true) {
-		this.playerActsFlop()
+		return this.playerActsFlop()
 	}
 	else {
+		this.hideButtons()
 		this.changeCurrentPlayer()
 		return this.playFlopRound()
 	}
@@ -171,6 +187,7 @@ round.prototype.playerActsFlop = function() {
 	$('#player'+ID).find(".fold").on('click', function () {
 		currentPlayer.inHand = false
 		$('#player'+ID).find("img").hide()
+		$('#player'+ID).find(".fold").off("click")
 		if (self.checkRoundEnd() === false) {
 			return self.playFlopRound()
 		}
@@ -183,10 +200,13 @@ round.prototype.playerActsFlop = function() {
 		self.pot += callDiff
 		self.currentPlayer.chips -=  callDiff
 		self.currentPlayer.currentBet = self.currentBetAmount
+		$('#player'+ID).find(".call").off("click")
 		if (self.checkRoundEnd() === false) {
+			console.log("Here")
 			return self.playFlopRound()
 		}
 		else {
+			console.log("Here2")
 			return self.dealTurn()
 		}
 	})
@@ -197,6 +217,7 @@ round.prototype.playerActsFlop = function() {
 		self.currentBetAmount = betSize
 		self.currentPlayer.chips -= betDiff
 		self.currentPlayer.currentBet = self.currentBetAmount
+		$('#player'+ID).find(".bet").off("click")
 		if (self.checkRoundEnd() === false) {
 			return self.playFlopRound()
 		}
@@ -210,13 +231,14 @@ round.prototype.playerActsFlop = function() {
 ////////////////// TURN ACTION /////////////////  /////////////////  /////////////////  ///////////////// 
 
 round.prototype.dealTurn = function () {
-	console.log(this.playerList)
 	var playerList = this.playerList
 	this.deck.slice(this.deckCount,this.deckCount+1).forEach(function(card){
 		for (player in playerList) {
 			playerList[player].addCard(card)
 		}
 	}) 
+	console.log("After Turn")
+	console.log(playerList)
 	dealTurnViews(playerList)
 	this.deckCount += 1
 	this.updatedInformationViews(playerList)
@@ -224,7 +246,8 @@ round.prototype.dealTurn = function () {
 }
 
 round.prototype.resetForTurn = function () {
-	this.currentPlayer =this.playerList[this.currentPlayerNumber]
+	this.hideButtons()
+	this.currentPlayer =this.playerList[this.dealerCounter]
 	for (player in this.playerList) {
 		this.playerList[player].currentBet =0
 	}
@@ -238,9 +261,10 @@ round.prototype.playTurnRound = function() {
 	this.updateInHand()
 	this.showButtons()
 	if (this.currentPlayer.inHand === true) {
-		this.playerActsTurn()
+		return this.playerActsTurn()
 	}
 	else {
+		this.hideButtons()
 		this.changeCurrentPlayer()
 		return this.playTurnRound()
 	}
@@ -252,6 +276,7 @@ round.prototype.playerActsTurn = function() {
 	var self = this
 	$('#player'+ID).find(".fold").on('click', function () {
 		currentPlayer.inHand = false
+		$('#player'+ID).find(".fold").off("click")
 		$('#player'+ID).find("img").hide()
 		if (self.checkRoundEnd() === false) {
 			return self.playTurnRound()
@@ -265,6 +290,7 @@ round.prototype.playerActsTurn = function() {
 		self.pot += callDiff
 		self.currentPlayer.chips -=  callDiff
 		self.currentPlayer.currentBet = self.currentBetAmount
+		$('#player'+ID).find(".call").off("click")
 		if (self.checkRoundEnd() === false) {
 			return self.playTurnRound()
 		}
@@ -279,6 +305,7 @@ round.prototype.playerActsTurn = function() {
 		self.currentBetAmount = betSize
 		self.currentPlayer.chips -= betDiff
 		self.currentPlayer.currentBet = self.currentBetAmount
+		$('#player'+ID).find(".bet").off("click")
 		if (self.checkRoundEnd() === false) {
 			return self.playTurnRound()
 		}
@@ -291,13 +318,14 @@ round.prototype.playerActsTurn = function() {
 ////////////////// RIVER ACTION /////////////////  /////////////////  /////////////////  ///////////////// 
 
 round.prototype.dealRiver = function () {
-	console.log(this.playerList)
 	var playerList = this.playerList
 	this.deck.slice(this.deckCount,this.deckCount+1).forEach(function(card){
 		for (player in playerList) {
 			playerList[player].addCard(card)
 		}
 	}) 
+	console.log("After River")
+	console.log(playerList)
 	dealRiverViews(playerList)
 	this.deckCount += 1
 	this.updatedInformationViews(playerList)
@@ -305,7 +333,8 @@ round.prototype.dealRiver = function () {
 }
 
 round.prototype.resetForRiver = function () {
-	this.currentPlayer =this.playerList[this.currentPlayerNumber]
+	this.hideButtons()
+	this.currentPlayer =this.playerList[this.dealerCounter]
 	for (player in this.playerList) {
 		this.playerList[player].currentBet =0
 	}
@@ -319,9 +348,10 @@ round.prototype.playRiverRound = function() {
 	this.updateInHand()
 	this.showButtons()
 	if (this.currentPlayer.inHand === true) {
-		this.playerActsRiver()
+		return this.playerActsRiver()
 	}
 	else {
+		this.hideButtons()
 		this.changeCurrentPlayer()
 		return this.playRiverRound()
 	}
@@ -334,6 +364,7 @@ round.prototype.playerActsRiver = function() {
 	var self = this
 	$('#player'+ID).find(".fold").on('click', function () {
 		currentPlayer.inHand = false
+		$('#player'+ID).find(".fold").off("click")
 		$('#player'+ID).find("img").hide()
 		if (self.checkRoundEnd() === false) {
 			return self.playRiverRound()
@@ -347,6 +378,7 @@ round.prototype.playerActsRiver = function() {
 		self.pot += callDiff
 		self.currentPlayer.chips -=  callDiff
 		self.currentPlayer.currentBet = self.currentBetAmount
+		$('#player'+ID).find(".call").off("click")
 		if (self.checkRoundEnd() === false) {
 			return self.playRiverRound()
 		}
@@ -361,6 +393,7 @@ round.prototype.playerActsRiver = function() {
 		self.currentBetAmount = betSize
 		self.currentPlayer.chips -= betDiff
 		self.currentPlayer.currentBet = self.currentBetAmount
+		$('#player'+ID).find(".bet").off("click")
 		if (self.checkRoundEnd() === false) {
 			return self.playRiverRound()
 		}
