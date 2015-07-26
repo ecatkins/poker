@@ -77,7 +77,6 @@ round.prototype.playPreFlopRound = function() {
 	}
 	else {
 		this.hideButtons()
-		this.changeCurrentPlayer()
 		return this.playPreFlopRound()
 	}
 }
@@ -93,6 +92,8 @@ round.prototype.playerActsPreFlop = function() {
 		currentPlayer.inHand = false
 		$('#player'+ID).find("img").hide()
 		$('#player'+ID).find(".fold").off("click")
+		$('#player'+ID).find(".call").off("click")
+		$('#player'+ID).find(".bet").off("click")
 		if (self.checkRoundEnd() === false) {
 			return self.playPreFlopRound()
 		}
@@ -107,6 +108,8 @@ round.prototype.playerActsPreFlop = function() {
 		self.currentPlayer.chips -=  callDiff
 		self.currentPlayer.currentBet = self.currentBetAmount
 		$('#player'+ID).find(".call").off("click")
+		$('#player'+ID).find(".fold").off("click")
+		$('#player'+ID).find(".bet").off("click")
 		if (self.checkRoundEnd() === false) {
 			console.log("Here")
 			return self.playPreFlopRound()
@@ -118,13 +121,19 @@ round.prototype.playerActsPreFlop = function() {
 	})
 
 	$('#player'+ID).find(".bet").on('click', function () {
-		var betSize = parseInt($('#player'+ID).find('[name=betamount]').val());
-		var betDiff = self.currentBetAmount - self.changeCurrentPlayer.currentBet
+		// var betSize = parseInt($('#player'+ID).find('[name=betamount]').val()); NOTE: got rid of 'parseInt'
+		var betSize = ($('#player'+ID).find('[name=betamount]').val());
+		var betDiff = betSize - self.currentPlayer.currentBet
 		self.pot += betDiff
 		self.currentBetAmount = betSize
 		self.currentPlayer.chips -= betDiff
-		self.currentPlayer.currentBet = self.currentBetAmount
+		self.currentPlayer.currentBet = betSize
+		console.log(betSize)
+		console.log(self.pot)
+		console.log(self.currentPlayer.chips)
 		$('#player'+ID).find(".bet").off("click")
+		$('#player'+ID).find(".call").off("click")
+		$('#player'+ID).find(".fold").off("click")
 		if (self.checkRoundEnd() === false) {
 			return self.playPreFlopRound()
 		}
@@ -156,7 +165,7 @@ round.prototype.dealFlop = function () {
 
 round.prototype.resetForFlop = function () {
 	this.hideButtons()
-	this.currentPlayer =this.playerList[this.dealerCounter]
+	this.currentPlayerNumber = this.dealerCounter
 	for (player in this.playerList) {
 		this.playerList[player].currentBet =0
 	}
@@ -174,7 +183,6 @@ round.prototype.playFlopRound = function() {
 	}
 	else {
 		this.hideButtons()
-		this.changeCurrentPlayer()
 		return this.playFlopRound()
 	}
 }
@@ -188,6 +196,8 @@ round.prototype.playerActsFlop = function() {
 		currentPlayer.inHand = false
 		$('#player'+ID).find("img").hide()
 		$('#player'+ID).find(".fold").off("click")
+		$('#player'+ID).find(".call").off("click")
+		$('#player'+ID).find(".bet").off("click")
 		if (self.checkRoundEnd() === false) {
 			return self.playFlopRound()
 		}
@@ -200,7 +210,9 @@ round.prototype.playerActsFlop = function() {
 		self.pot += callDiff
 		self.currentPlayer.chips -=  callDiff
 		self.currentPlayer.currentBet = self.currentBetAmount
+		$('#player'+ID).find(".fold").off("click")
 		$('#player'+ID).find(".call").off("click")
+		$('#player'+ID).find(".bet").off("click")
 		if (self.checkRoundEnd() === false) {
 			console.log("Here")
 			return self.playFlopRound()
@@ -211,12 +223,15 @@ round.prototype.playerActsFlop = function() {
 		}
 	})
 	$('#player'+ID).find(".bet").on('click', function () {
-		var betSize = parseInt($('#player'+ID).find('[name=betamount]').val());
-		var betDiff = self.currentBetAmount - self.changeCurrentPlayer.currentBet
+	// var betSize = parseInt($('#player'+ID).find('[name=betamount]').val()); NOTE: got rid of 'parseInt'
+		var betSize = ($('#player'+ID).find('[name=betamount]').val());
+		var betDiff = betSize - self.currentPlayer.currentBet
 		self.pot += betDiff
 		self.currentBetAmount = betSize
 		self.currentPlayer.chips -= betDiff
-		self.currentPlayer.currentBet = self.currentBetAmount
+		self.currentPlayer.currentBet = betSize
+		$('#player'+ID).find(".fold").off("click")
+		$('#player'+ID).find(".call").off("click")
 		$('#player'+ID).find(".bet").off("click")
 		if (self.checkRoundEnd() === false) {
 			return self.playFlopRound()
@@ -265,7 +280,6 @@ round.prototype.playTurnRound = function() {
 	}
 	else {
 		this.hideButtons()
-		this.changeCurrentPlayer()
 		return this.playTurnRound()
 	}
 }
@@ -277,6 +291,8 @@ round.prototype.playerActsTurn = function() {
 	$('#player'+ID).find(".fold").on('click', function () {
 		currentPlayer.inHand = false
 		$('#player'+ID).find(".fold").off("click")
+		$('#player'+ID).find(".call").off("click")
+		$('#player'+ID).find(".bet").off("click")
 		$('#player'+ID).find("img").hide()
 		if (self.checkRoundEnd() === false) {
 			return self.playTurnRound()
@@ -290,7 +306,9 @@ round.prototype.playerActsTurn = function() {
 		self.pot += callDiff
 		self.currentPlayer.chips -=  callDiff
 		self.currentPlayer.currentBet = self.currentBetAmount
+		$('#player'+ID).find(".fold").off("click")
 		$('#player'+ID).find(".call").off("click")
+		$('#player'+ID).find(".bet").off("click")
 		if (self.checkRoundEnd() === false) {
 			return self.playTurnRound()
 		}
@@ -299,12 +317,15 @@ round.prototype.playerActsTurn = function() {
 		}
 	})
 	$('#player'+ID).find(".bet").on('click', function () {
-		var betSize = parseInt($('#player'+ID).find('[name=betamount]').val());
-		var betDiff = self.currentBetAmount - self.changeCurrentPlayer.currentBet
+// var betSize = parseInt($('#player'+ID).find('[name=betamount]').val()); NOTE: got rid of 'parseInt'
+		var betSize = ($('#player'+ID).find('[name=betamount]').val());
+		var betDiff = betSize - self.currentPlayer.currentBet
 		self.pot += betDiff
 		self.currentBetAmount = betSize
 		self.currentPlayer.chips -= betDiff
-		self.currentPlayer.currentBet = self.currentBetAmount
+		self.currentPlayer.currentBet = betSize
+		$('#player'+ID).find(".fold").off("click")
+		$('#player'+ID).find(".call").off("click")
 		$('#player'+ID).find(".bet").off("click")
 		if (self.checkRoundEnd() === false) {
 			return self.playTurnRound()
@@ -352,7 +373,6 @@ round.prototype.playRiverRound = function() {
 	}
 	else {
 		this.hideButtons()
-		this.changeCurrentPlayer()
 		return this.playRiverRound()
 	}
 }
@@ -365,6 +385,8 @@ round.prototype.playerActsRiver = function() {
 	$('#player'+ID).find(".fold").on('click', function () {
 		currentPlayer.inHand = false
 		$('#player'+ID).find(".fold").off("click")
+		$('#player'+ID).find(".call").off("click")
+		$('#player'+ID).find(".bet").off("click")
 		$('#player'+ID).find("img").hide()
 		if (self.checkRoundEnd() === false) {
 			return self.playRiverRound()
@@ -378,7 +400,9 @@ round.prototype.playerActsRiver = function() {
 		self.pot += callDiff
 		self.currentPlayer.chips -=  callDiff
 		self.currentPlayer.currentBet = self.currentBetAmount
+		$('#player'+ID).find(".fold").off("click")
 		$('#player'+ID).find(".call").off("click")
+		$('#player'+ID).find(".bet").off("click")
 		if (self.checkRoundEnd() === false) {
 			return self.playRiverRound()
 		}
@@ -387,24 +411,83 @@ round.prototype.playerActsRiver = function() {
 		}
 	})
 	$('#player'+ID).find(".bet").on('click', function () {
-		var betSize = parseInt($('#player'+ID).find('[name=betamount]').val());
-		var betDiff = self.currentBetAmount - self.changeCurrentPlayer.currentBet
+// var betSize = parseInt($('#player'+ID).find('[name=betamount]').val()); NOTE: got rid of 'parseInt'
+		var betSize = ($('#player'+ID).find('[name=betamount]').val());
+		var betDiff = betSize - self.currentPlayer.currentBet
 		self.pot += betDiff
 		self.currentBetAmount = betSize
 		self.currentPlayer.chips -= betDiff
-		self.currentPlayer.currentBet = self.currentBetAmount
+		self.currentPlayer.currentBet = betSize
+		$('#player'+ID).find(".fold").off("click")
+		$('#player'+ID).find(".call").off("click")
 		$('#player'+ID).find(".bet").off("click")
 		if (self.checkRoundEnd() === false) {
 			return self.playRiverRound()
 		}
 		else {
+			this.handComparison
 			console.log("FINISHED")
 		}
 	})
 }
 
 ////////////////// COMPARE CARDS /////////////////  /////////////////  /////////////////  ///////////////// 
+function compareIndex(player1, player2) {
+  if (player1.handScore()[0] < player2.handScore()[0]){
+    return -1;
+  }
+  if (player1.handScore()[0] > player2.handScore()[0]){
+    return 1;
+  }
+  return 0
+}
 
+function compareScore(player1, player2) {
+  if (player1.handScore()[1] < player2.handScore()[1]){
+    return -1;
+  }
+  if (player1.handScore()[1] > player2.handScore()[1]){
+    return 1;
+  }
+  return 0
+}
+
+
+function indexComparison(inHandPlayers) {
+	var sameHand = []
+	for(var i = 1; i < inHandPlayerslength; i++) {
+		if(inHandPlayers[i].handScore()[0] === inHandPlayers[0].handScore()[0]) {
+			sameHand.push(inHandPlayers[i])
+		}
+		else {
+			return sameHand
+		}
+	}
+	return sameHand
+}
+
+
+
+
+
+
+round.prototype.handComparison = function() {
+	this.hideButtons()
+	this.updatedInformationViews()
+	this.updateInHand()
+	console.log(this.inHand)
+	this.inHand.sort(compareIndex)
+	if (indexComparison(this.inHand) === []) {
+		return this.inHand[0]
+	}
+	else {
+		var sameHand = indexComparison(this.inHand)
+		sameHand.sort(compareScore)
+		return sameHand[0]
+
+	}
+
+}
 
 
 ////////////////// MISC////////////////
@@ -423,7 +506,7 @@ round.prototype.changeCurrentPlayer = function() {
 
 /// this function sets the list that shows who hasn't folded
 round.prototype.updateInHand = function() {
-	this.hand = []
+	this.inHand = []
 	for (player in this.playerList) {
 		if (this.playerList[player].inHand != false) {
 			this.inHand.push(this.playerList[player])
@@ -431,7 +514,7 @@ round.prototype.updateInHand = function() {
 	}
 }
 
-round.prototype.checkRoundEnd = function(inHand) {
+round.prototype.checkRoundEnd = function() {
 	for(var i = 1; i < this.inHand.length; i++) {
 		if(this.inHand[i].currentBet !== this.inHand[0].currentBet)
 			return false

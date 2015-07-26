@@ -58,9 +58,8 @@ player.prototype.handScore = function() {
     allHands = []
     var handTypes = [straightFlush, fourOfAKind,fullHouse, flush, straight, threeOfAKind, twoPair, pair, highCard]
     function assessHands(func,index,array) {
-      hands = []
       if (func(playerHand)) {
-        allHands.push([func(playerHand),index])
+        allHands.push([index, func(playerHand)[1], func(playerHand)[0]])
       }
     }
     handTypes.forEach(assessHands)
@@ -77,9 +76,6 @@ var player4 = new player("Greg",4)
 // var player3 = new player("Computer")
 
 var currentPlayerList = [player1, player2,player3,player4]
-
-
-
 
 
 
