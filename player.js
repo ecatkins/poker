@@ -32,7 +32,7 @@ var player = function(name,id){
     this.playerName = name
     this.playerID = id
     this.hand = new blankHand().hand
-    ///harcoded chips
+    ///harcoded chips (change?)
     this.chips = 1500
     this.currentBet = 0
     this.inHand = true
