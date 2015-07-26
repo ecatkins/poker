@@ -508,7 +508,7 @@ round.prototype.handComparison = function() {
 		sameHand.sort(compareScore)
 		winningPlayer = sameHand[0]
 	}
-	onsole.log(winningPlayer.handScore())
+	console.log(winningPlayer.handScore())
 	return this.awardPot(winningPlayer)
 }
 
@@ -520,9 +520,11 @@ round.prototype.awardPot  = function(winningPlayer) {
 	$(".card").empty()
 	$(".card").show()
 	///All players in hand
-	this.resetPlayerInHand()
+	this.resetPlayer()
 	///Update information
 	this.updatedInformationViews()
+	this.removeEliminatedPlayers()
+	console.log(this.playerList)
 	this.changeDealerCounter()
 	return this.game.gamePlay()
 }
@@ -631,7 +633,7 @@ round.prototype.dealerChipViews = function () {
 	$('#player'+ID).find(".dealer").html("<img src ='images/dealer.jpg'>")
 }
 
-round.prototype.resetPlayerInHand = function () {
+round.prototype.resetPlayer = function () {
 	this.playerList.forEach(function(player) {
 		player.inHand = true
 		player.clearHand()
@@ -639,7 +641,13 @@ round.prototype.resetPlayerInHand = function () {
 	})
 }
 
-// $('#player'+ID).find(".stack").text("Current Stack: " + player.chips)
+round.prototype.removeEliminatedPlayers = function () {
+	this.playerList.forEach(function(player, index, array) {
+		if (player.chips <= 0) {
+			array.splice(index, 1)
+		}		
+	})
+}
 
 $(document).ready(function(){
 	var newGame = new game(currentPlayerList)
