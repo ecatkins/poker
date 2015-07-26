@@ -35,8 +35,8 @@ function flush(hand) {
 }
 
 function flush_score(hand) {
-  score = 0
-  valueList =[]
+  var score = 0
+  var valueList =[]
   for (var card in hand) {
     valueList.push(hand[card].Value)
   }
@@ -143,21 +143,21 @@ function pair_score(hand) {
 
 
 function straight(hand) {
-  listTypes = []
-  straight = false
+  var listTypes = []
+  var straight = false
    for (var key in hand.Types){
     if (hand.Types[key].length > 0) {
       listTypes.push(hand.Types[key][0])
     }
   }
     listTypes.sort(compare).reverse()
-    for (var i=0; i < listTypes.length-3;i++) {
+    for (var i=0; i < listTypes.length-3; i++) {
       if (listTypes[i].Value === listTypes[i+1].Value + 1 
         && listTypes[i].Value === listTypes[i+2].Value + 2
         && listTypes[i].Value === listTypes[i+3].Value + 3
         && listTypes[i].Value === listTypes[i+4].Value + 4)
        {
-        straight = listTypes.slice(i,i+5)
+        var straight = listTypes.slice(i,i+5)
         break
       }
     }
@@ -175,7 +175,7 @@ function straight_score(hand) {
 
 
 function straightFlush(hand) {
-  straightFlush = false
+  var straightFlush = false
   for (var key in hand.Suits){
     if (hand.Suits[key].length >=5){
       var flushSuit = hand.Suits[key]
@@ -226,7 +226,7 @@ function fullHouse(hand) {
     }
   }
   if (bestThree[0].Value != 0 && bestTwo[0].Value != 0) {
-    bestFullHouse = bestThree.concat(bestTwo)
+    var bestFullHouse = bestThree.concat(bestTwo)
     return [bestFullHouse, fullHouse_score(bestFullHouse)]
   }
   return false
@@ -258,15 +258,15 @@ function twoPair(hand) {
         nextTwo = hand.Types[key]
       }
     }
-  else if(hand.Types[key].length === 1) {
-    if (hand.Types[key][0].Value > bestHigh[0].Value) {
-      bestHigh = hand.Types[key]
+    else if(hand.Types[key].length === 1) {
+      if (hand.Types[key][0].Value > bestHigh[0].Value) {
+        bestHigh = hand.Types[key]
+      }
     }
-  }
   }
   if (bestTwo[0].Value != 0 && nextTwo[0].Value !=0) {
     var fourCards = bestTwo.concat(nextTwo)
-    bestTwoPair = fourCards.concat(bestHigh)
+    var bestTwoPair = fourCards.concat(bestHigh)
     return [bestTwoPair, TwoPair_score(bestTwoPair)]
   }
 return false
@@ -281,7 +281,7 @@ function TwoPair_score(hand) {
 function highCard(hand) {
   var cards = hand['Cards']
   cards.sort(compare).reverse()
-  best5 = cards.slice(0,5)
+  var best5 = cards.slice(0,5)
   return [best5, highCard_score(best5)]
 }
 
