@@ -6,8 +6,6 @@ var game = function(playerList) {
 	this.gamePlay()
 }
 
-
-
 game.prototype.gamePlay = function() {
 	thisGame = this
 	var cycle1 = new round(this.playerList,this.dealerCounter,this.smallBlind,this.bigBlind,thisGame)
