@@ -4,8 +4,8 @@
 }
 
 .dealer img {
-	max-width:4em;
-	max-height:4em;
+	max-width:2em;
+	max-height:2em;
 }
 
 
@@ -19,57 +19,89 @@
 	left:25em;
 }
 
+.holecard1 img {
+	max-height:3em;
+}
+
 .holecard2 {
 	left:35em;
+}
+
+.holecard2 img {
+	max-height:3em;
 }
 
 .boardcard3 {
 	left:20em;
 }
 
+.boardcard3 img {
+	max-height: 3em;
+}
+
 .boardcard4 {
 	left:25em;
 }
+
+
+.boardcard4 img {
+	max-height: 3em;
+}
+
 
 .boardcard5 {
 	left:30em;
 }
 
+.boardcard5 img {
+	max-height: 3em;
+}
+
+
 .boardcard6 {
 	left:35em;
 }
+
+.boardcard6 img {
+	max-height: 3em;
+}
+
 
 .boardcard7 {
 	left:40em;
 }
 
+.boardcard7 img {
+	max-height: 3em;
+}
+
 
 #player1 {
-	height: 10em;
+	height: 6em;
 	border: blue solid 0.2em;
 	position:relative;
 }
 
 #player2 {
-	height: 10em;
+	height: 6em;
 	border: green solid 0.2em;
 	position: relative;
 }
 
 #player3 {
-	height: 10em;
+	height: 6em;
 	border: violet solid 0.2em;
 	position: relative;
 }
 
 #player4 {
-	height: 10em;
+	height: 6em;
 	border: gray solid 0.2em;
 	position: relative;
 }
 
 #board {
-	height: 10em;
+	height: 6em;
 	border: red solid 0.2em;
 	position: relative;
 }
