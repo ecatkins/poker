@@ -98,39 +98,51 @@
 
 #player1 {
 	height: 12em;
-	width: 12em;
-	border: blue solid 0.2em;
-	position:absolute;
+	width: 16em;
+/*	border: blue solid 0.2em;
+*/	position:absolute;
 	left: 10%;
 }
 
 #player1 .dealer {
 	position: absolute;
-	right:1em;
-	top: 8em;
+	right:3em;
+	top: 1em;
+}
+
+#player1 .buttons {
+	position: absolute;
+	bottom: 2em;
+	right: 0em;
 }
 
 
 #player2 {
 	height: 12em;
-	width: 12em;
-	border: blue solid 0.2em;
-	position:absolute;
-	left: 10%;
+	width: 16em;
+/*	border: blue solid 0.2em;
+*/	position:absolute;
+	left: 7%;
 	top: 60%;
 }
 
 #player2 .dealer {
 	position: absolute;
-	right:.5em;
+	right: 3em;
+}
+
+#player2 .buttons {
+	position: absolute;
+	bottom: 2em;
+	right: 1em;
 }
 
 #player3 {
 	height: 12em;
-	width: 12em;
-	border: blue solid 0.2em;
-	position:absolute;
-	right: 10%;
+	width: 16em;
+/*	border: blue solid 0.2em;
+*/	position:absolute;
+	right: 3%;
 }
 
 #player3 .dealer {
@@ -139,12 +151,18 @@
 	left:.5em;
 }
 
+#player3 .buttons {
+	position: absolute;
+	bottom: 2em;
+	right: 0em;
+}
+
 #player4 {
 	height: 12em;
-	width: 12em;
-	border: blue solid 0.2em;
-	position:absolute;
-	right: 10%;
+	width: 16em;
+/*	border: blue solid 0.2em;
+*/	position:absolute;
+	right: 3%;
 	top: 60%;
 }
 
@@ -154,11 +172,17 @@
 	right:2em;
 }
 
+#player4 .buttons {
+	position: absolute;
+	bottom: 2em;
+	right: 0em;
+}
+
 #board {
 	height: 10em;
 	width: 14em;
-	border: red solid 0.2em;
-	position: absolute;
+/*	border: red solid 0.2em;
+*/	position: absolute;
 	left: 35.6%;
 	top: 30%;
 }
@@ -166,8 +190,8 @@
 #messages {
 	height: 6em;
 	width: 14em;
-	border: yellow solid 0.2em;
-	position: absolute;
+/*	border: yellow solid 0.2em;
+*/	position: absolute;
 	bottom: 1%;
 	left: 35.5%;
 }
