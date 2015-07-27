@@ -117,7 +117,7 @@
 }
 
 
-#player2 {
+#player4 {
 	height: 12em;
 	width: 16em;
 /*	border: blue solid 0.2em;
@@ -126,15 +126,35 @@
 	top: 60%;
 }
 
-#player2 .dealer {
+#player4 .dealer {
 	position: absolute;
 	right: 3em;
+}
+
+#player4 .buttons {
+	position: absolute;
+	bottom: 2em;
+	right: 1em;
+}
+
+#player2 {
+	height: 12em;
+	width: 16em;
+/*	border: blue solid 0.2em;
+*/	position:absolute;
+	right: 3%;
+}
+
+#player2 .dealer {
+	position: absolute;
+	bottom: .5em;
+	left:.5em;
 }
 
 #player2 .buttons {
 	position: absolute;
 	bottom: 2em;
-	right: 1em;
+	right: 0em;
 }
 
 #player3 {
@@ -143,36 +163,16 @@
 /*	border: blue solid 0.2em;
 */	position:absolute;
 	right: 3%;
-}
-
-#player3 .dealer {
-	position: absolute;
-	bottom: .5em;
-	left:.5em;
-}
-
-#player3 .buttons {
-	position: absolute;
-	bottom: 2em;
-	right: 0em;
-}
-
-#player4 {
-	height: 12em;
-	width: 16em;
-/*	border: blue solid 0.2em;
-*/	position:absolute;
-	right: 3%;
 	top: 60%;
 }
 
-#player4 .dealer {
+#player3 .dealer {
 	position: absolute;
 	bottom: 2em;
 	right:2em;
 }
 
-#player4 .buttons {
+#player3 .buttons {
 	position: absolute;
 	bottom: 2em;
 	right: 0em;
