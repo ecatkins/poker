@@ -24,7 +24,8 @@ var round = function(playerList, dealerCounter, smallBlind, bigBlind, thisGame) 
 	this.bigBlind = bigBlind
 	this.currentPlayerNumber = this.dealerCounter
 	this.currentPlayer = this.playerList[this.currentPlayerNumber]
-	this.inHand = []
+	this.inHand = [] // not folded, but may be all in
+	this.activeInHand = [] // not folded, not all  in
 	this.currentBetAmount = this.bigBlind
 	this.game = thisGame
 	this.endRoundCounter = 0
@@ -67,10 +68,6 @@ round.prototype.dealHoleCards = function() {
 	dealHoleCardsViews(playerList[player])
 		this.deckCount += 2
 	}
-	console.log("After Hole cards")
-	console.log(playerList)
-
-
 	this.updatedInformationViews(playerList)
 	return this.playPreFlopRound()
 }
@@ -80,11 +77,12 @@ round.prototype.playPreFlopRound = function() {
 	this.updatedInformationViews()
 	this.changeCurrentPlayer()
 	this.updateInHand()
+	this.updateActiveInHand()
 	if (this.inHand.length === 1) {
 		return this.awardPot(this.inHand[0])
 	}
 	this.showButtons()
-	if (this.currentPlayer.inHand === true) {
+	if (this.currentPlayer.chips > 0 && this.currentPlayer.inHand != false) {
 		this.endRoundCounter += 1
 		return this.playerActsPreFlop()
 	}
@@ -108,6 +106,8 @@ round.prototype.playerActsPreFlop = function() {
 		$('#player'+ID).find(".call").off("click")
 		$('#player'+ID).find(".bet").off("click")
 		if (self.checkRoundEnd() === false) {
+			self.updateActiveInHand()
+			self.updateInHand()
 			return self.playPreFlopRound()
 		}
 		else {
@@ -163,8 +163,6 @@ round.prototype.dealFlop = function () {
 			playerList[player].addCard(card)
 		}
 	}) 
-	console.log("After Flop")
-	console.log(playerList)
 	dealFlopViews(playerList)
 	this.deckCount += 3
 	this.updatedInformationViews(playerList)
@@ -187,11 +185,12 @@ round.prototype.playFlopRound = function() {
 	this.updatedInformationViews()
 	this.changeCurrentPlayer()
 	this.updateInHand()
+	this.updateActiveInHand()
 	if (this.inHand.length === 1) {
 		return this.awardPot(this.inHand[0])
 	}
 	this.showButtons()
-	if (this.currentPlayer.inHand === true) {
+	if (this.currentPlayer.chips > 0 && this.currentPlayer.inHand != false) {
 		this.endRoundCounter += 1
 		return this.playerActsFlop()
 	}
@@ -213,6 +212,8 @@ round.prototype.playerActsFlop = function() {
 		$('#player'+ID).find(".call").off("click")
 		$('#player'+ID).find(".bet").off("click")
 		if (self.checkRoundEnd() === false) {
+			self.updateActiveInHand()
+			self.updateInHand()
 			return self.playFlopRound()
 		}
 		else {
@@ -264,8 +265,6 @@ round.prototype.dealTurn = function () {
 			playerList[player].addCard(card)
 		}
 	}) 
-	console.log("After Turn")
-	console.log(playerList)
 	dealTurnViews(playerList)
 	this.deckCount += 1
 	this.updatedInformationViews(playerList)
@@ -276,7 +275,7 @@ round.prototype.resetForTurn = function () {
 	this.hideButtons()
 	this.endRoundCounter = 0
 	this.currentBetAmount = 0
-	this.currentPlayer =this.playerList[this.dealerCounter]
+	this.currentPlayerNumber = this.dealerCounter
 	for (player in this.playerList) {
 		this.playerList[player].currentBet = 0
 	}
@@ -288,11 +287,12 @@ round.prototype.playTurnRound = function() {
 	this.updatedInformationViews()
 	this.changeCurrentPlayer()
 	this.updateInHand()
+	this.updateActiveInHand()
 	if (this.inHand.length === 1) {
 		return this.awardPot(this.inHand[0])
 	}
 	this.showButtons()
-	if (this.currentPlayer.inHand === true) {
+	if (this.currentPlayer.chips > 0 && this.currentPlayer.inHand != false) {
 		this.endRoundCounter += 1
 		return this.playerActsTurn()
 	}
@@ -313,6 +313,8 @@ round.prototype.playerActsTurn = function() {
 		$('#player'+ID).find(".call").off("click")
 		$('#player'+ID).find(".bet").off("click")
 		if (self.checkRoundEnd() === false) {
+			self.updateActiveInHand()
+			self.updateInHand()
 			return self.playTurnRound()
 		}
 		else {
@@ -363,8 +365,6 @@ round.prototype.dealRiver = function () {
 			playerList[player].addCard(card)
 		}
 	}) 
-	console.log("After River")
-	console.log(playerList)
 	dealRiverViews(playerList)
 	this.deckCount += 1
 	this.updatedInformationViews(playerList)
@@ -374,7 +374,7 @@ round.prototype.dealRiver = function () {
 round.prototype.resetForRiver = function () {
 	this.hideButtons()
 	this.currentBetAmount = 0
-	this.currentPlayer =this.playerList[this.dealerCounter]
+	this.currentPlayerNumber = this.dealerCounter
 	this.endRoundCounter = 0
 	for (player in this.playerList) {
 		this.playerList[player].currentBet =0
@@ -386,12 +386,13 @@ round.prototype.playRiverRound = function() {
 	this.hideButtons()
 	this.updatedInformationViews()
 	this.changeCurrentPlayer()
+	this.updateActiveInHand()
 	this.updateInHand()
 	if (this.inHand.length === 1) {
 		return this.awardPot(this.inHand[0])
 	}
 	this.showButtons()
-	if (this.currentPlayer.inHand === true) {
+	if (this.currentPlayer.chips > 0 && this.currentPlayer.inHand != false) {
 		this.endRoundCounter  += 1
 		return this.playerActsRiver()
 	}
@@ -413,10 +414,11 @@ round.prototype.playerActsRiver = function() {
 		$('#player'+ID).find(".call").off("click")
 		$('#player'+ID).find(".bet").off("click")
 		if (self.checkRoundEnd() === false) {
+			this.updateActiveInHand()
+			this.updateInHand()
 			return self.playRiverRound()
 		}
 		else {
-			console.log("FINISHED")
 			return self.handComparison()
 		}
 	} )
@@ -484,11 +486,9 @@ function indexComparison(inHandPlayers) {
 			sameHand.push(inHandPlayers[i])
 		}
 		else {
-			console.log(sameHand)
 			return sameHand
 		}
 	}
-	console.log(sameHand)
 	return sameHand
 }
 
@@ -522,7 +522,6 @@ round.prototype.awardPot  = function(winningPlayer) {
 	///Update information
 	this.updatedInformationViews()
 	this.removeEliminatedPlayers()
-	console.log(this.playerList)
 	this.changeDealerCounter()
 	return this.game.gamePlay()
 }
@@ -554,6 +553,20 @@ round.prototype.changeCurrentPlayer = function() {
 }
 
 /// this function sets the list that shows who hasn't folded
+round.prototype.updateActiveInHand = function() {
+	this.activeInHand = []
+	for (player in this.playerList) {
+		console.log(this.playerList[player])
+		console.log(this.playerList[player].chips > 0)
+		console.log(this.playerList[player].inHand !== false)
+
+		if (this.playerList[player].chips > 0 && this.playerList[player].inHand !== false) {
+			this.activeInHand.push(this.playerList[player])
+		}	
+	}
+}
+
+
 round.prototype.updateInHand = function() {
 	this.inHand = []
 	for (player in this.playerList) {
@@ -564,11 +577,11 @@ round.prototype.updateInHand = function() {
 }
 
 round.prototype.checkRoundEnd = function() {
-	if (this.endRoundCounter < this.inHand.length) {
+	if (this.endRoundCounter < this.activeInHand.length && this.activeInHand.length != 1 ) {
 		return false
 	}
-	for(var i = 1; i < this.inHand.length; i++) {
-		if(this.inHand[i].currentBet !== this.inHand[0].currentBet)
+	for(var i = 1; i < this.activeInHand.length; i++) {
+		if(this.activeInHand[i].currentBet !== this.activeInHand[0].currentBet)
 			return false
 	}
 	return true;
