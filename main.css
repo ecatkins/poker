@@ -82,13 +82,13 @@
 }
 
 #table {
-	font-weight: bold;
+	font-family: 'Poiret One', cursive;
 	color: white;
 	position: fixed;
 	top: 10%;
 	left: 15%;
-	height: 50%;
-	width: 50%;
+	height: 55%;
+	width: 55%;
 	border: 1em solid black;
 	border-radius: 10em;
 	background-color: #006600;
@@ -101,6 +101,7 @@
 	width: 16em;
 /*	border: blue solid 0.2em;
 */	position:absolute;
+	top: 5%;
 	left: 10%;
 }
 
@@ -134,7 +135,7 @@
 #player4 .buttons {
 	position: absolute;
 	bottom: 2em;
-	right: 1em;
+	right: 0em;
 }
 
 #player2 {
@@ -142,6 +143,7 @@
 	width: 16em;
 /*	border: blue solid 0.2em;
 */	position:absolute;
+	top: 2%;
 	right: 3%;
 }
 
@@ -188,6 +190,7 @@
 }
 
 #messages {
+	text-align: center;
 	height: 6em;
 	width: 14em;
 /*	border: yellow solid 0.2em;

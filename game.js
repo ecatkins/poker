@@ -503,7 +503,7 @@ round.prototype.handComparison = function() {
 	}
 	else {
 		var sameHand = indexComparison(this.inHand)
-		sameHand.sort(compareScore)
+		sameHand.sort(compareScore).reverse()
 		winningPlayer = sameHand[0]
 	}
 	console.log(winningPlayer.handScore())
