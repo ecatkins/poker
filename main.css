@@ -1,6 +1,7 @@
 .dealer {
 	position: absolute;
-	right:20em;
+	right:15em;
+	top: 1em;
 }
 
 .dealer img {
@@ -12,11 +13,11 @@
 .card {
 	display: inline;
 	position: absolute;
-	top: 2em;
+	top: 6em;
 }
 
 .holecard1 {
-	left:25em;
+	left: 1em;
 }
 
 .holecard1 img {
@@ -24,7 +25,7 @@
 }
 
 .holecard2 {
-	left:35em;
+	left: 4em;
 }
 
 .holecard2 img {
@@ -75,46 +76,88 @@
 	max-height: 3em;
 }
 
+#table {
+	font-weight: bold;
+	color: white;
+	position: fixed;
+	top: 10%;
+	left: 15%;
+	height: 50%;
+	width: 50%;
+	border: 1em solid black;
+	border-radius: 10em;
+	background-color: #006600;
 
-#player1 {
-	height: 6em;
-	border: blue solid 0.2em;
-	position:relative;
 }
 
+
+#player1 {
+	height: 12em;
+	width: 12em;
+	border: blue solid 0.2em;
+	position:absolute;
+	left: 10%;
+}
+
+#player1 .dealer {
+	position: absolute;
+	right:1em;
+	top: 8em;
+}
+
+
 #player2 {
-	height: 6em;
-	border: green solid 0.2em;
-	position: relative;
+	height: 12em;
+	width: 12em;
+	border: blue solid 0.2em;
+	position:absolute;
+	left: 10%;
+	top: 60%;
+}
+
+#player2 .dealer {
+	position: absolute;
+	right:1em;
 }
 
 #player3 {
-	height: 6em;
-	border: orange solid 0.2em;
-	position: relative;
+	height: 12em;
+	width: 12em;
+	border: blue solid 0.2em;
+	position:absolute;
+	right: 10%;
 }
 
 #player4 {
-	height: 6em;
-	border: gray solid 0.2em;
-	position: relative;
+	height: 12em;
+	width: 12em;
+	border: blue solid 0.2em;
+	position:absolute;
+	right: 10%;
+	top: 60%;
 }
 
 #board {
-	height: 6em;
+	height: 10em;
+	width: 10em;
 	border: red solid 0.2em;
-	position: relative;
+	position: absolute;
+	left: 40%;
+	top: 30%;
 }
 
 #messages {
 	height: 6em;
+	width: 14em;
 	border: yellow solid 0.2em;
-	position: relative;
+	position: absolute;
+	bottom: 1%;
+	left: 35.5%;
 }
 
 .buttons {
 	position: absolute;
-	left:60em;
+	right: 5em;
 }
 
 .fold {
